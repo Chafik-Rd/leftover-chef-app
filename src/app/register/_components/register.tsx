@@ -59,7 +59,7 @@ export const Register = () => {
     }
   };
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className="flex flex-1 items-center justify-center">
       <Card className="flex flex-col items-center gap-12 px-20 py-12">
         <h1 className="text-5xl font-bold">ลงทะเบียน</h1>
         {errorMessage.trim() !== "" && (
