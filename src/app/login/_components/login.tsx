@@ -3,11 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { AuthService } from "@/services/auth.service";
+import { useAuthStore } from "@/store/auth.store";
 import { ArrowRight, UserRound, LockKeyhole, EyeOff, Eye } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const Login = () => {
+  const { setUser } = useAuthStore();
+  const router = useRouter();
+
   const [isShowPass, setIsShhowPass] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,8 +28,13 @@ export const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const user = await AuthService.login(email, password);
-      console.log(user);
+      const response = await AuthService.login(email, password);
+      setUser(response.data.user);
+      if (response.data.role === "admin") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/");
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -32,7 +42,7 @@ export const Login = () => {
     }
   };
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className="flex flex-1 items-center justify-center">
       <Card className="flex flex-col items-center gap-12 px-20 py-12">
         <h1 className="text-5xl font-bold">เข้าสู่ระบบ</h1>
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
