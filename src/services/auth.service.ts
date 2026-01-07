@@ -13,4 +13,10 @@ export class AuthService {
     const response = await api.post("/api/auth/login", { email, password });
     return response.data;
   }
+
+  // Logout
+  static async logout() {
+    const response = await api.post("api/auth/logout");
+    return response.data;
+  }
 }

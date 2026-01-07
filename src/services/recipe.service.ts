@@ -50,4 +50,10 @@ export class RecipeService {
     const response = await api.delete(`/api/recipe/${id}`);
     return response.data;
   }
+
+  // Function to fetch all recipes with user
+  static async fetchAllRecipesMatch() {
+    const response = await api.get("/api/recipe/user-match");
+    return response.data;
+  }
 }
