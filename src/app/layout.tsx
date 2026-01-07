@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Prompt } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/navbar";
+import { AuthProvider } from "@/components/auth-provide";
+import { LayoutWrapper } from "@/components/layout-wrapper";
 
 const prompt = Prompt({
   weight: ["300", "400", "500", "700"],
@@ -22,11 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${prompt.variable} antialiased`}>
-        {" "}
-        <div className="h-screen w-full">
-          <Navbar />
-          {children}
-        </div>
+        <AuthProvider>
+          <LayoutWrapper>{children}</LayoutWrapper>
+        </AuthProvider>
       </body>
     </html>
   );
