@@ -1,25 +1,10 @@
 "use client";
 
+import { InputIngredient } from "@/components/input-Ingredient";
 import { RecipeSection } from "@/components/recipe-section";
+import { SelectUnit } from "@/components/select-unit";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { unitsIngredients } from "@/data/constants";
 import { IngredientService } from "@/services/ingredient.service";
 import { AddIngredientProps, Ingredients } from "@/types/recipe.type";
 import { handleAddItem, handleDeleteItem } from "@/utils/recipeSection";
@@ -35,7 +20,6 @@ export const AddIngredient = ({
     { id: number; name: string }[]
   >([]);
 
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   // Read ingredient from database
   useEffect(() => {
@@ -73,64 +57,13 @@ export const AddIngredient = ({
             <div className="bg-secondary-surface flex items-center justify-center rounded-full text-xl font-medium">
               <p className="h-8 w-8 text-center">{index + 1}</p>
             </div>
-            <Popover
-              open={activeIndex === index}
-              onOpenChange={(isOpen) => setActiveIndex(isOpen ? index : null)}
-            >
-              <PopoverTrigger asChild>
-                <div className="relative w-full">
-                  <Input
-                    placeholder="ชื่อวัตถุดิบ"
-                    value={ingredients[index].name}
-                    onChange={(e) => {
-                      updateIngredient(index, "name", e.target.value);
-                      if (e.target.value.length > 0) setActiveIndex(index);
-                    }}
-                  />
-                </div>
-              </PopoverTrigger>
-
-              <PopoverContent
-                className="p-0"
-                onOpenAutoFocus={(e) => e.preventDefault()}
-              >
-                <Command>
-                  <CommandList>
-                    <CommandEmpty>
-                      <div className="flex flex-col items-center justify-center text-sm">
-                        <p className="text-muted-foreground">
-                          ไม่พบวัตถุดิบ {ingredients[index].name}
-                        </p>
-                        <Button
-                          variant="link"
-                          size="sm"
-                          className="mt-1 text-[#A67B5B]"
-                          onClick={() => setActiveIndex(null)} // หรือจะเขียน logic เพิ่มลง DB ตรงนี้ก็ได้
-                        >
-                          + ใช้ชื่อนี้เป็นวัตถุดิบใหม่
-                        </Button>
-                      </div>
-                    </CommandEmpty>
-                    <CommandGroup>
-                      {dbIngredients
-                        .filter((i) => i.name.includes(ingredients[index].name))
-                        .map((ingredient) => (
-                          <CommandItem
-                            key={ingredient.id}
-                            value={ingredient.name}
-                            onSelect={(currentValue) => {
-                              updateIngredient(index, "name", currentValue);
-                              setActiveIndex(null);
-                            }}
-                          >
-                            {ingredient.name}
-                          </CommandItem>
-                        ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
+            <InputIngredient
+              value={ingredients[index].name}
+              onChangeValue={(newName) =>
+                updateIngredient(index, "name", newName)
+              }
+              dbIngredients={dbIngredients}
+            />
 
             <Input
               type="number"
@@ -142,7 +75,7 @@ export const AddIngredient = ({
               placeholder="ปริมาณ"
               className="w-1/4"
             />
-            <NativeSelect
+            <SelectUnit
               value={ingredients[index].unit}
               onChange={(e) =>
                 updateIngredient(
@@ -151,15 +84,7 @@ export const AddIngredient = ({
                   e.target.value as Ingredients["unit"],
                 )
               }
-              className="w-full min-w-30"
-            >
-              <NativeSelectOption value="">เลือกหน่วย</NativeSelectOption>
-              {unitsIngredients.map((unit, index) => (
-                <NativeSelectOption key={index} value={unit.value}>
-                  {unit.label}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+            />
 
             <Button
               size="icon"

@@ -62,13 +62,13 @@ export interface ReadAllRecipeType {
   cookTime: number;
   level: RecipeLevel;
   imageUrl: string;
+  calorie: number;
+  servings: number;
 }
 
 // Type for read recipe by id
 export interface ReadRecipeByIdType extends ReadAllRecipeType {
   description: string;
-  calorie: number;
-  servings: number;
   ingredients: Ingredients[];
   instructions: string[];
 }
@@ -83,3 +83,14 @@ export interface RcipeTableProps {
 
 //Type for update recipe
 export type UpdateRecipeType = Partial<CreateRecipeType>;
+
+export interface ReadAllRecipesMatchType extends ReadAllRecipeType {
+  ingredients: Ingredients[];
+  matchPercentage: number;
+  ingredientsSummary: {
+    available: string[];
+    missing: string[];
+    missingCount: number;
+  };
+  isFullyMatch: boolean;
+}

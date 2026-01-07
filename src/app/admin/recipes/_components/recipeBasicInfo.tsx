@@ -1,11 +1,7 @@
 import { InputLable } from "@/components/input-label";
 import { RecipeSection } from "@/components/recipe-section";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
+import { SelectLevel } from "@/components/select-level";
 import { Textarea } from "@/components/ui/textarea";
-import { levelsRecipes } from "@/data/constants";
 import { CreateRecipeType } from "@/types/recipe.type";
 
 export const RecipeBasicInfo = ({
@@ -68,21 +64,7 @@ export const RecipeBasicInfo = ({
           />
           <label>
             <p>ระดับความยาก</p>
-            <NativeSelect
-              value={data.level}
-              name="level"
-              onChange={handleChange}
-              className="w-full min-w-30"
-            >
-              <NativeSelectOption value="">
-                เลือกระดับความยาก
-              </NativeSelectOption>
-              {levelsRecipes.map((unit, index) => (
-                <NativeSelectOption key={index} value={unit.value}>
-                  {unit.label}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+            <SelectLevel value={data.level} onChange={handleChange} />
           </label>
         </div>
         <label>
