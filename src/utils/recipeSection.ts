@@ -48,3 +48,11 @@ export const validateRecipeForm = (form: CreateRecipeType) => {
 
   return hasImage && hasBasicInfo && hasIngredients && hasInstructions;
 };
+
+// Label for display
+export const getLabel = (
+  value: string,
+  lists: Array<{ label: string; value: string }>,
+) => {
+  return lists.find((list) => list.value === value)?.label || value;
+};

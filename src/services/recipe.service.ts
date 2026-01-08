@@ -56,4 +56,10 @@ export class RecipeService {
     const response = await api.get("/api/recipe/user-match");
     return response.data;
   }
+
+  // Function to fetch a recipe with user by ID
+  static async fetchRecipeMatchById(id: number) {
+    const response = await api.get(`/api/recipe/user-match/${id}`);
+    return response.data;
+  }
 }

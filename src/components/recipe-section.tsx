@@ -10,7 +10,7 @@ export const RecipeSection = ({
   showAddButton = false,
 }: RecipeSectionProps) => {
   return (
-    <Card className="w-full p-7">
+    <Card className="w-full p-7 max-w-300">
       <section className="flex items-center justify-between">
         <p className="text-3xl font-medium">{title}</p>
         {showAddButton && (

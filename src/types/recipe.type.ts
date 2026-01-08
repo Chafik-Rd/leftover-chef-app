@@ -25,10 +25,29 @@ export const RECIPE_LEVEL = ["easy", "medium", "hard"] as const;
 // Create type from array
 export type RecipeLevel = (typeof RECIPE_LEVEL)[number];
 
+// All recipe match status
+export const RECIPE_MATCH_STATUS = [
+  "available",
+  "insufficient",
+  "missing",
+] as const;
+
+// Create type from array
+export type RecipeMatchStatus = (typeof RECIPE_MATCH_STATUS)[number];
+
 export type Ingredients = {
   name: string;
   amount: number;
   unit: IngredientUnit;
+};
+
+export type IngredientsMatch = {
+  name: string;
+  requiredAmount: string;
+  unit: IngredientUnit;
+  status: RecipeMatchStatus;
+  currentStock: number;
+  shortageAmount: number;
 };
 
 // Type for creating a recipe
@@ -67,10 +86,12 @@ export interface ReadAllRecipeType {
 }
 
 // Type for read recipe by id
-export interface ReadRecipeByIdType extends ReadAllRecipeType {
+export interface BaseRecipeDetailType extends ReadAllRecipeType {
   description: string;
-  ingredients: Ingredients[];
   instructions: string[];
+}
+export interface ReadRecipeByIdType<T> extends BaseRecipeDetailType {
+  ingredients: T[];
 }
 
 // Props for recipe table component

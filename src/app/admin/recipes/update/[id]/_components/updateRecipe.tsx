@@ -12,7 +12,12 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { validateRecipeForm } from "@/utils/recipeSection";
 import { RecipeService } from "@/services/recipe.service";
-import { CreateRecipeType, Ingredients, ReadRecipeByIdType, UpdateRecipeType } from "@/types/recipe.type";
+import {
+  CreateRecipeType,
+  Ingredients,
+  ReadRecipeByIdType,
+  UpdateRecipeType,
+} from "@/types/recipe.type";
 
 const defaultIngredient: Ingredients = {
   name: "",
@@ -22,7 +27,8 @@ const defaultIngredient: Ingredients = {
 
 export const UpdateRecipe = () => {
   const { id } = useParams();
-  const [dbRecipe, setDbRecipe] = useState<ReadRecipeByIdType | null>(null);
+  const [dbRecipe, setDbRecipe] =
+    useState<ReadRecipeByIdType<Ingredients> | null>(null);
   const [form, setForm] = useState<CreateRecipeType>({
     name: "",
     description: "",
@@ -74,7 +80,8 @@ export const UpdateRecipe = () => {
 
     (Object.keys(form) as Array<keyof CreateRecipeType>).forEach((key) => {
       const currentValue = form[key];
-      const originalValue = dbRecipe?.[key as keyof ReadRecipeByIdType];
+      const originalValue =
+        dbRecipe?.[key as keyof ReadRecipeByIdType<Ingredients>];
 
       // Check for changes in field values
       const isImageChanged = key === "image" && currentValue instanceof File;

@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { ReadAllRecipesMatchType } from "@/types/recipe.type";
 import { levelsRecipes } from "@/data/constants";
+import { getLabel } from "@/utils/recipeSection";
 
 const colorRecipeLevel: Record<string, string> = {
   easy: "bg-difficulty-easy-bg text-difficulty-easy",
@@ -12,9 +13,8 @@ const colorRecipeLevel: Record<string, string> = {
   hard: "bg-difficulty-hard-bg text-difficulty-hard",
 };
 export const CardRecipe = ({ recipe }: { recipe: ReadAllRecipesMatchType }) => {
-  const recipeLevel =
-    levelsRecipes.find((level) => level.value === recipe.level)?.label ||
-    recipe.level;
+  const displayLevel = getLabel(recipe.level, levelsRecipes);
+
   return (
     <Card className="w-full min-w-65 overflow-hidden p-0 hover:shadow-lg">
       <div className="relative h-44">
@@ -37,7 +37,7 @@ export const CardRecipe = ({ recipe }: { recipe: ReadAllRecipesMatchType }) => {
         <Badge
           className={`absolute bottom-2 left-2 ${colorRecipeLevel[recipe.level]}`}
         >
-          {recipeLevel}
+          {displayLevel}
         </Badge>
       </div>
       <div className="flex flex-col gap-2 p-4">
@@ -67,7 +67,7 @@ export const CardRecipe = ({ recipe }: { recipe: ReadAllRecipesMatchType }) => {
               </Badge>
             ) : (
               //  ถ้าขาดบางส่วน
-              <span className="text-xs font-medium text-difficulty-hard-bg">
+              <span className="text-difficulty-hard-bg text-xs font-medium">
                 ขาดวัตถุดิบอีก {recipe.ingredientsSummary.missingCount} อย่าง
               </span>
             )}

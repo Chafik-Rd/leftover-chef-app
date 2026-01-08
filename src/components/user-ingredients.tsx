@@ -4,15 +4,15 @@ import { Card } from "./ui/card";
 import { UserIngredientsProps } from "@/types/user-ingredient.type";
 import { unitsIngredients } from "@/data/constants";
 import { useUserIngreStore } from "@/store/user-ingredient.store";
+import { getLabel } from "@/utils/recipeSection";
 
 export const UserIngredients = ({ onDelete }: UserIngredientsProps) => {
   const { userIngredients } = useUserIngreStore();
   return (
     <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4">
       {userIngredients.map((userIngre) => {
-        const unitsIngredient =
-          unitsIngredients.find((unit) => unit.value === userIngre.unit)
-            ?.label || userIngre.unit;
+        const displayUnit = getLabel(userIngre.unit, unitsIngredients);
+
         return (
           <Card
             key={userIngre.id}
@@ -20,15 +20,15 @@ export const UserIngredients = ({ onDelete }: UserIngredientsProps) => {
           >
             <div className="flex flex-col gap-1">
               <p className="text-foreground font-bold">{userIngre.name}</p>
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <Badge>
-                  {userIngre.amount} {unitsIngredient}
+                  {userIngre.amount} {displayUnit}
                 </Badge>
                 <div className="flex flex-col items-end">
                   <span className="text-muted-foreground text-xs">
                     วันหมดอายุ
                   </span>
-                  <span className="text-xs font-medium text-primary">
+                  <span className="text-primary text-xs font-medium">
                     {userIngre.expiryDate
                       ? new Date(userIngre.expiryDate).toLocaleDateString(
                           "th-TH",
