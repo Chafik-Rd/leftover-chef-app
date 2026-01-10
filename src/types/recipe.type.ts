@@ -105,8 +105,7 @@ export interface RcipeTableProps {
 //Type for update recipe
 export type UpdateRecipeType = Partial<CreateRecipeType>;
 
-export interface ReadAllRecipesMatchType extends ReadAllRecipeType {
-  ingredients: Ingredients[];
+export interface MatchInfo {
   matchPercentage: number;
   ingredientsSummary: {
     available: string[];
@@ -115,3 +114,24 @@ export interface ReadAllRecipesMatchType extends ReadAllRecipeType {
   };
   isFullyMatch: boolean;
 }
+
+export interface ReadAllRecipesMatchType extends ReadAllRecipeType, MatchInfo {
+  ingredients: Ingredients[];
+}
+
+export interface BaseCardProps extends ReadAllRecipeType {
+  className?: string;
+}
+export interface RecipeStats {
+  cookingCount?: number;
+  ingredientCount?: number;
+  viewCount?: number;
+}
+
+export type CardRecipeProps<T> = BaseCardProps & T;
+
+export type AllowedCardData = MatchInfo | RecipeStats
+
+export type TrendingRecipe = ReadAllRecipeType & { viewCount: number };
+export type LowIngreRecipe = ReadAllRecipeType & { ingredientCount: number };
+export type FavoriteRecipe = ReadAllRecipeType & { cookingCount: number };

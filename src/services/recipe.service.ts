@@ -44,6 +44,11 @@ export class RecipeService {
     const response = await api.get(`/api/recipe/${id}`);
     return response.data;
   }
+  // Function to fetch a recipe by ID for user
+  static async fetchRecipeByIdForUser(id: number) {
+    const response = await api.get(`/api/recipe/${id}/match`);
+    return response.data;
+  }
 
   // Function to delete a recipe by ID
   static async deleteRecipe(id: number) {
@@ -51,15 +56,25 @@ export class RecipeService {
     return response.data;
   }
 
-  // Function to fetch all recipes with user
-  static async fetchAllRecipesMatch() {
-    const response = await api.get("/api/recipe/user-match");
+  // Function to fetch recommend recipes
+  static async fetchRecommendRecipes() {
+    const response = await api.get("api/recipe/community-favorites");
+    return response.data;
+  }
+  // Function to fetch low ingredient recipes
+  static async fetchLowIngredientRecipes() {
+    const response = await api.get("api/recipe/low-ingredient");
+    return response.data;
+  }
+  // Function to fetch tranding recipes
+  static async fetchTrendingRecipes() {
+    const response = await api.get("api/recipe/trending");
     return response.data;
   }
 
-  // Function to fetch a recipe with user by ID
-  static async fetchRecipeMatchById(id: number) {
-    const response = await api.get(`/api/recipe/user-match/${id}`);
+  // Function to update an existing recipe
+  static async updateViewCountRecipe(id: number) {
+    const response = await api.patch(`/api/recipe/${id}/view`);
     return response.data;
   }
 }

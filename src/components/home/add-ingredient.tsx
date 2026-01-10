@@ -21,7 +21,7 @@ export const AddUserIngredient = ({
 }: {
   onSetIsUserIngre: (value: boolean) => void;
 }) => {
-  const { setUserIngredient } = useUserIngreStore();
+  const { addUserIngre } = useUserIngreStore();
   const defaultForm: FormUserIngredientType = {
     name: "",
     amount: 0,
@@ -34,7 +34,13 @@ export const AddUserIngredient = ({
     { id: number; name: string }[]
   >([]);
   const [loading, setLoading] = useState(false);
-  const [isSave, setIsSave] = useState(false);
+
+  // Validate recipe form
+  const isFormValid =
+    form.name.trim() !== "" &&
+    form.unit.trim() !== "" &&
+    form.amount > 0 &&
+    form.expiryDate !== undefined;
 
   // Read ingredient from database
   useEffect(() => {
@@ -52,24 +58,10 @@ export const AddUserIngredient = ({
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Validate recipe form
-  useEffect(() => {
-    const validateUserIngreForm = (form: FormUserIngredientType) => {
-      const hasForm =
-        form.name.trim() !== "" &&
-        form.unit.trim() !== "" &&
-        form.amount > 0 &&
-        form.expiryDate !== undefined;
-
-      return hasForm;
-    };
-    setIsSave(validateUserIngreForm(form));
-  }, [form]);
-
   // Function handle submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isSave || !form.expiryDate) return;
+    if (!isFormValid || !form.expiryDate) return;
     setLoading(true);
     try {
       const payloadDate = new Date(form.expiryDate);
@@ -81,8 +73,7 @@ export const AddUserIngredient = ({
       const response =
         await UserIngredientService.createUserIngredient(payload);
       if (response.success) {
-        const response = await UserIngredientService.getUserIngredient();
-        setUserIngredient(response.data);
+        addUserIngre(response.data);
         setForm(defaultForm);
       }
     } catch (err) {
@@ -160,7 +151,9 @@ export const AddUserIngredient = ({
             <Button variant="outline" onClick={() => onSetIsUserIngre(false)}>
               ยกเลิก
             </Button>
-            <Button disabled={!isSave}>{loading ? "กำลังเพิ่ม..." : "เพิ่ม"}</Button>
+            <Button disabled={!isFormValid}>
+              {loading ? "กำลังเพิ่ม..." : "เพิ่ม"}
+            </Button>
           </div>
         </form>
       </Card>
