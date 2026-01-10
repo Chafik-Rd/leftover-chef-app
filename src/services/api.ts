@@ -11,4 +11,17 @@ const api = axios.create({
   withCredentials: true, // critical for sending cookies!
 });
 
+// Interceptors response
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.warn("Unauthorized! Redirecting to login...");
+      localStorage.removeItem("access_token");
+      window.location.href = "/login";
+    }
+  },
+);
 export default api;

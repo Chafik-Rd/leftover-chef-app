@@ -38,15 +38,14 @@ export const Register = () => {
     SetErrorMessage("");
     setLoading(true);
     try {
-      const user = await AuthService.register(form);
-      console.log(user);
+      await AuthService.register(form);
       router.push("/login");
     } catch (err) {
       console.error(err);
       if (axios.isAxiosError(err)) {
         const serverMessage = err.response?.data?.message;
 
-        if (serverMessage === "Email already in use!") {
+        if (serverMessage === "Email already exists") {
           SetErrorMessage("อีเมลนี้มีการลงทะเบียนแล้ว");
         } else {
           SetErrorMessage("เกิดข้อผิดพลาดในการลงทะเบียน");
@@ -63,7 +62,7 @@ export const Register = () => {
       <Card className="flex flex-col items-center gap-12 px-20 py-12">
         <h1 className="text-5xl font-bold">ลงทะเบียน</h1>
         {errorMessage.trim() !== "" && (
-          <p className="bg-difficulty-hard-bg/50 rounded-md px-4 py-2 text-red-500">
+          <p className="bg-text-difficulty-hard rounded-md px-4 py-2 text-difficulty-hard-bg">
             {errorMessage}
           </p>
         )}

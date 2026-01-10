@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const syncProfile = async () => {
+      if (localStorage.getItem("is_logged_in") !== "true") return;
       try {
         const response = await UserService.getUserProfile();
         setUser(response.data);
