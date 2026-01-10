@@ -15,6 +15,8 @@ import {
 import { IngredientService } from "@/services/ingredient.service";
 import { UserIngredientService } from "@/services/user-ingredient.service";
 import { useUserIngreStore } from "@/store/user-ingredient.store";
+import { useAuthStore } from "@/store/auth.store";
+import { useRouter } from "next/navigation";
 
 export const AddUserIngredient = ({
   onSetIsUserIngre,
@@ -22,6 +24,9 @@ export const AddUserIngredient = ({
   onSetIsUserIngre: (value: boolean) => void;
 }) => {
   const { addUserIngre } = useUserIngreStore();
+  const {user} = useAuthStore()
+const router = useRouter()
+
   const defaultForm: FormUserIngredientType = {
     name: "",
     amount: 0,
@@ -61,6 +66,7 @@ export const AddUserIngredient = ({
   // Function handle submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if(!user) return router.push("/login")
     if (!isFormValid || !form.expiryDate) return;
     setLoading(true);
     try {

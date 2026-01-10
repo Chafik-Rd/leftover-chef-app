@@ -20,6 +20,10 @@ import { IngredientsMatch, ReadRecipeByIdType } from "@/types/recipe.type";
 import { RecipeService } from "@/services/recipe.service";
 import { getLabel } from "@/utils/recipeSection";
 import { levelsRecipes, unitsIngredients } from "@/data/constants";
+import { useAuthStore } from "@/store/auth.store";
+import { useUserIngreStore } from "@/store/user-ingredient.store";
+import { CookingHistoryService } from "@/services/cooking-history.service";
+import { LoadingChef } from "@/components/loading-chef";
 
 const colorRecipeLevel: Record<string, string> = {
   easy: "text-difficulty-easy-bg bg-difficulty-easy",
@@ -29,20 +33,34 @@ const colorRecipeLevel: Record<string, string> = {
 
 export const RecipeDetail = () => {
   const { id } = useParams();
-  const route = useRouter();
+  const router = useRouter();
+
+  const { user } = useAuthStore();
+  const { userIngredients } = useUserIngreStore();
+
   const [dbRecipe, setDbRecipe] =
     useState<ReadRecipeByIdType<IngredientsMatch> | null>(null);
 
   const [loading, setLoading] = useState(false);
+  const [cooking, setCooking] = useState(false);
 
+  const displayLevel = dbRecipe ? getLabel(dbRecipe.level, levelsRecipes) : "";
+  const isMatch = !user || userIngredients.length === 0 ? false : true;
   // Fetch recipe by id
   useEffect(() => {
     const fetchRecipe = async () => {
       setLoading(true);
       try {
-        const response = await RecipeService.fetchRecipeMatchById(Number(id));
-        console.log(response.data);
-        setDbRecipe(response.data);
+        await RecipeService.updateViewCountRecipe(Number(id));
+        if (user) {
+          const response = await RecipeService.fetchRecipeByIdForUser(
+            Number(id),
+          );
+          setDbRecipe(response.data);
+        } else {
+          const response = await RecipeService.fetchRecipeById(Number(id));
+          setDbRecipe(response.data);
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -52,7 +70,36 @@ export const RecipeDetail = () => {
     fetchRecipe();
   }, [id]);
 
-  const displayLevel = dbRecipe ? getLabel(dbRecipe.level, levelsRecipes) : "";
+  const handleCooking = async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    if (userIngredients.length === 0) {
+      // toast.error("กรุณาเพิ่มวัตถุดิบในตู้เย็นก่อนเริ่มทำอาหาร");
+      router.push("/");
+      return;
+    }
+
+    setCooking(true);
+    const startTime = Date.now();
+    try {
+      await CookingHistoryService.createCookingHid(Number(id));
+
+      const elapsedTime = Date.now() - startTime;
+      const minimumDelay = 1500; // 1.5s
+      const waitTime = Math.max(0, minimumDelay - elapsedTime);
+      if (elapsedTime < minimumDelay) {
+        // Wait time
+        await new Promise((resolve) => setTimeout(resolve, waitTime));
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setCooking(false);
+    }
+  };
 
   // Loading
   if (loading) {
@@ -94,7 +141,7 @@ export const RecipeDetail = () => {
         <p className="text-xl font-medium text-gray-500">
           ไม่พบข้อมูลเมนูอาหารนี้
         </p>
-        <Button onClick={() => route.push("/")}>กลับไปหน้าหลัก</Button>
+        <Button onClick={() => router.push("/")}>กลับไปหน้าหลัก</Button>
       </div>
     );
   }
@@ -153,7 +200,9 @@ export const RecipeDetail = () => {
                 className="flex h-16 items-center justify-between rounded-md border border-transparent bg-gray-50 p-3 transition-colors hover:border-gray-200"
               >
                 <div className="flex items-center gap-3">
-                  {ingredient.status === "available" ? (
+                  {!isMatch ? (
+                    <div className="h-5 w-5 rounded-full border-2 border-slate-200" />
+                  ) : ingredient.status === "available" ? (
                     <CheckCircle2 className="text-green-500" size={20} />
                   ) : (
                     <XCircle className="text-red-500" size={20} />
@@ -164,7 +213,7 @@ export const RecipeDetail = () => {
                   <span className="text-sm font-bold">
                     {ingredient.requiredAmount} {displayUnit}
                   </span>
-                  {ingredient.status !== "available" && (
+                  {isMatch && ingredient.status !== "available" && (
                     <p className="text-xs text-red-500">
                       (ขาด {ingredient.shortageAmount} {displayUnit})
                     </p>
@@ -175,6 +224,7 @@ export const RecipeDetail = () => {
           })}
         </div>
       </RecipeSection>
+
       {/* Instruction */}
       <RecipeSection title="วิธีทำ">
         <section className="flex flex-col gap-4">
@@ -196,14 +246,16 @@ export const RecipeDetail = () => {
 
       {/* Button section */}
       <div className="flex items-center gap-4">
-        <Button onClick={() => route.push("/")} variant="outline">
+        <Button onClick={() => router.push("/")} variant="outline">
           กลับไปยังรายการ
         </Button>
-        <Button>
+        <Button onClick={handleCooking}>
           <ChefHat />
           <span>เริ่มทำอาหาร</span>
         </Button>
       </div>
+
+      {cooking && <LoadingChef />}
     </div>
   );
 };
