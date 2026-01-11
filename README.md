@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 👨🏻‍🍳 Leftover Chef (Frontend)
 
-## Getting Started
+แอปพลิเคชันเว็บสำหรับจัดการวัตถุดิบและค้นหาเมนูอาหาร พัฒนาด้วย **Next.js** เพื่อประสิทธิภาพที่ยอดเยี่ยมและการจัดการ Route ที่แม่นยำ
 
-First, run the development server:
+## 🛠️ Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Components:** Shadcn UI
+- **Icons:** Lucide React
+- **Data Fetching:** Axios
+- **State Management:** Zustand
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+
+ตรวจสอบว่าเครื่องของคุณมีการติดตั้ง:
+
+- Node.js (LTS version)
+
+- pnpm (`npm install -g pnpm`)
+
+### 2. Installation
+
+```sh
+# ติดตั้ง Dependencies
+pnpm install
+
+# สร้างไฟล์ Environment
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+อย่าลืมระบุ `NEXT_PUBLIC_API_URL` ใน `.env.local`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Running the App
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```sh
+pnpm dev
+```
 
-## Learn More
+เปิดดูแอปได้ที่: `http://localhost:3000`
 
-To learn more about Next.js, take a look at the following resources:
+## 📂 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+/src
+ ├── app              # Next.js App Router (admin, login, recipe, register)
+ ├── components       # Reusable UI Components
+ ├── data             # Static data หรือ Mock data ต่างๆ
+ ├── lib              # Shared libraries และ Axios instance configuration
+ ├── services         # API service functions แยกตามโมดูล (สอดคล้องกับ Backend)
+ ├── store            # Zustand stores สำหรับจัดการ Global State
+ ├── types            # TypeScript Interfaces / Types definitions
+ ├── utils            # Helper functions ต่างๆ
+ └── middleware.ts    # Route protection และการจัดการสิทธิ์การเข้าถึง
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔐 Authentication & Session
 
-## Deploy on Vercel
+- ระบบใช้ **HttpOnly Cookies** ผ่านการตั้งค่า `withCredentials: true` ใน Axios
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- มีการใช้ **Middleware** (`middleware.ts`) เพื่อดักเช็คสิทธิ์การเข้าถึงหน้า Protected Routes (เช่น Admin หรือ User Dashboard)
