@@ -5,7 +5,8 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import type { AllowedCardData, CardRecipeProps } from "@/types/recipe.type";
 import { levelsRecipes } from "@/data/constants";
-import { getLabel } from "@/utils/recipeSection";
+import { getLabel } from "@/utils/recipe-section";
+
 
 const colorRecipeLevel: Record<string, string> = {
   easy: "bg-difficulty-easy-bg text-difficulty-easy",

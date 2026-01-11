@@ -4,7 +4,8 @@ import { Card } from "./ui/card";
 import { UserIngredientsProps } from "@/types/user-ingredient.type";
 import { unitsIngredients } from "@/data/constants";
 import { useUserIngreStore } from "@/store/user-ingredient.store";
-import { getLabel } from "@/utils/recipeSection";
+import { getLabel } from "@/utils/recipe-section";
+
 
 export const UserIngredients = ({ onDelete }: UserIngredientsProps) => {
   const { userIngredients } = useUserIngreStore();

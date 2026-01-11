@@ -18,7 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { RecipeSection } from "@/components/recipe-section";
 import { IngredientsMatch, ReadRecipeByIdType } from "@/types/recipe.type";
 import { RecipeService } from "@/services/recipe.service";
-import { getLabel } from "@/utils/recipeSection";
+import { getLabel } from "@/utils/recipe-section";
 import { levelsRecipes, unitsIngredients } from "@/data/constants";
 import { useAuthStore } from "@/store/auth.store";
 import { useUserIngreStore } from "@/store/user-ingredient.store";

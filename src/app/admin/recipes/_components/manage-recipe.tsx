@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { RecipeTable } from "./recipeTable";
 import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -9,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { ReadAllRecipeType, RecipeLevel } from "@/types/recipe.type";
 import { RecipeService } from "@/services/recipe.service";
 import { SelectLevel } from "@/components/select-level";
+import { RecipeTable } from "./recipe-table";
 
 export const ManageRecipe = () => {
   const [dbRecipes, setDbRecipes] = useState<ReadAllRecipeType[]>([]);

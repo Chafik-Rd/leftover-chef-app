@@ -2,7 +2,7 @@ import { RecipeSection } from "@/components/recipe-section";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { AddInstructionsProps } from "@/types/recipe.type";
-import { handleAddItem, handleDeleteItem } from "@/utils/recipeSection";
+import { handleAddItem, handleDeleteItem } from "@/utils/recipe-section";
 import { X } from "lucide-react";
 
 export const AddInstruction = ({

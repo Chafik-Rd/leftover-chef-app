@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { IngredientService } from "@/services/ingredient.service";
 import { AddIngredientProps, Ingredients } from "@/types/recipe.type";
-import { handleAddItem, handleDeleteItem } from "@/utils/recipeSection";
+import { handleAddItem, handleDeleteItem } from "@/utils/recipe-section";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 

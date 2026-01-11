@@ -6,9 +6,9 @@ import {
   ShoppingBasket,
   LogOut,
 } from "lucide-react";
-import { AdminMenuItem } from "./_components/adminMenuItem";
 import { Button } from "@/components/ui/button";
 import { AsideSidebar } from "@/components/ui/aside";
+import { AdminMenuItem } from "./_components/admin-menu-item";
 
 export default function AdminLayout({
   children,

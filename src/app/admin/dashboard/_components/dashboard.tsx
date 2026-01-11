@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Utensils, ShoppingBasket, Users, TrendingUp } from "lucide-react";
-import { StatsCard } from "./statsCard";
+import { StatsCard } from "./stats-card";
+
 
 export const Dashboard = () => {
   return (
